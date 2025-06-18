@@ -134,7 +134,7 @@ func (s *StepRunSourceServer) Cleanup(state multistep.StateBag) {
 func (s *StepRunSourceServer) createSourceServerVm(config *Config, pvcName string, cloudInit *CloudInitConfig) *virtv1.VirtualMachine {
 
 	image := fmt.Sprintf("docker://%s", strings.ReplaceAll(config.RunConfig.SourceImage, "docker://", ""))
-	var running = true
+	runStrategy := virtv1.RunStrategyAlways
 
 	return &virtv1.VirtualMachine{
 		ObjectMeta: metav1.ObjectMeta{
@@ -145,7 +145,7 @@ func (s *StepRunSourceServer) createSourceServerVm(config *Config, pvcName strin
 			},
 		},
 		Spec: virtv1.VirtualMachineSpec{
-			Running: &running,
+			RunStrategy: &runStrategy,
 			Template: &virtv1.VirtualMachineInstanceTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
